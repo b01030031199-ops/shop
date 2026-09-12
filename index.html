@@ -123,6 +123,33 @@
       margin-left: 5px;
     }
 
+    /* 오른쪽 버튼 두 개를 나란히 */
+    .head-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* 소리 켜기/끄기 버튼 */
+    .sound-btn {
+      background: none;
+      border: 1px solid var(--line);
+      border-radius: 2px;
+      width: 34px;
+      height: 34px;
+      font-size: 14px;
+      line-height: 1;
+      cursor: pointer;
+      opacity: 0.4;                /* 꺼져 있을 때는 흐리게 */
+      transition: opacity 0.2s, border-color 0.2s;
+    }
+
+    /* 켜져 있을 때 */
+    .sound-btn.on {
+      opacity: 1;
+      border-color: var(--accent);
+    }
+
     /* ===== 첫 화면 (큰 사진) ===== */
     .hero {
       position: relative;
@@ -490,6 +517,22 @@
       margin-bottom: 3px;
     }
 
+    /* 효과음 출처 표기 - 아주 작게 */
+    .credit {
+      margin-top: 34px;
+      padding-top: 20px;
+      border-top: 1px solid var(--line);
+    }
+
+    .credit p {
+      font-size: 11px;
+      color: #5E5A55;
+    }
+
+    .credit a {
+      color: #5E5A55;
+    }
+
     /* ===== 화면이 좁을 때 ===== */
     @media (max-width: 880px) {
       nav {
@@ -540,9 +583,15 @@
         <a href="#products">위생용품</a>
       </nav>
 
-      <button class="cart-btn" onclick="showCart()">CART <span id="cartCount">0</span></button>
+      <div class="head-right">
+        <button class="sound-btn on" id="soundBtn" onclick="toggleSound()" title="강아지 소리 켜기 / 끄기">🔊</button>
+        <button class="cart-btn" onclick="showCart()">CART <span id="cartCount">0</span></button>
+      </div>
     </div>
   </header>
+
+  <!-- 상품에 마우스를 올렸을 때 재생할 강아지 소리 -->
+  <audio id="barkSound" src="bark.ogg" preload="auto"></audio>
 
   <!-- ===== 첫 화면 ===== -->
   <section class="hero">
@@ -767,6 +816,11 @@
         <p>help@doggynara.co.kr</p>
       </div>
     </div>
+
+    <!-- 효과음 출처 표기 (CC BY-SA 라이선스 조건) -->
+    <div class="wrap credit">
+      <p>효과음 : <a href="https://commons.wikimedia.org/wiki/File:Sound-of-dog.ogg" target="_blank" rel="noopener">Sound-of-dog</a> · Wikimedia Commons · CC BY-SA 3.0</p>
+    </div>
   </footer>
 
   <script>
@@ -866,13 +920,48 @@
       btn.classList.toggle("on");
     }
 
-    /* ===== 상품 카드를 누르면 장바구니에 담기 ===== */
+    /* ===== 강아지 소리 효과음 ===== */
+
+    var bark = document.getElementById("barkSound");
+    var soundOn = true;    // 소리 켜짐 / 꺼짐
+    var lastPlay = 0;      // 마지막으로 소리를 낸 시각
+
+    // 스피커 버튼을 누르면 켜기 <-> 끄기
+    function toggleSound() {
+      soundOn = !soundOn;   // true 면 false 로, false 면 true 로 뒤집기
+      var btn = document.getElementById("soundBtn");
+      btn.classList.toggle("on", soundOn);
+      btn.textContent = soundOn ? "🔊" : "🔇";
+    }
+
+    // 강아지 소리 재생
+    function playBark() {
+      if (!soundOn) return;
+
+      // 마우스를 빠르게 훑을 때 소리가 겹치지 않도록 0.5초 간격을 둠
+      var now = Date.now();
+      if (now - lastPlay < 500) return;
+      lastPlay = now;
+
+      bark.currentTime = 0;         // 처음부터 다시 재생
+      bark.volume = 0.45;           // 너무 크지 않게
+
+      // 브라우저가 자동 재생을 막는 경우가 있어 오류를 무시해 줍니다
+      // (화면을 한 번 클릭하면 그다음부터 정상 재생됩니다)
+      var p = bark.play();
+      if (p) { p.catch(function () {}); }
+    }
+
+    /* ===== 상품 카드 - 클릭하면 담기, 마우스를 올리면 소리 ===== */
 
     var allCards = document.querySelectorAll(".card");
     for (var k = 0; k < allCards.length; k++) {
       allCards[k].onclick = function () {
         addCart(this.querySelector("h3").textContent);
       };
+
+      // mouseenter : 카드 안으로 마우스가 처음 들어올 때 한 번만 실행
+      allCards[k].onmouseenter = playBark;
     }
   </script>
 
