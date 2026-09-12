@@ -101,16 +101,20 @@
 
     /* 장바구니 버튼 - 테두리만 있는 담백한 모양 */
     .cart-btn {
+      position: relative;          /* 개수 배지의 기준 위치 */
       background: none;
       border: 1px solid var(--line);
-      color: var(--text);
-      font-family: inherit;
-      font-size: 12.5px;
-      letter-spacing: 0.06em;
-      padding: 9px 16px;
       border-radius: 2px;
+      width: 34px;
+      height: 34px;
+      color: var(--text);
       cursor: pointer;
       transition: border-color 0.2s, color 0.2s;
+
+      /* 아이콘을 한가운데로 */
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .cart-btn:hover {
@@ -118,9 +122,21 @@
       color: var(--accent);
     }
 
+    /* 담은 개수 배지 - 아이콘 오른쪽 위에 붙음 */
     #cartCount {
-      color: var(--accent);
-      margin-left: 5px;
+      display: none;               /* 0개일 때는 숨김 */
+      position: absolute;
+      top: -7px;
+      right: -7px;
+      min-width: 18px;
+      height: 18px;
+      padding: 0 5px;
+      background-color: var(--accent);
+      color: #0B0B0D;
+      font-size: 10.5px;
+      font-weight: 500;
+      line-height: 18px;
+      border-radius: 9px;
     }
 
     /* 오른쪽 버튼 두 개를 나란히 */
@@ -602,7 +618,16 @@
 
       <div class="head-right">
         <button class="sound-btn on" id="soundBtn" onclick="toggleSound()" title="강아지 소리 켜기 / 끄기">🔊</button>
-        <button class="cart-btn" onclick="showCart()">CART <span id="cartCount">0</span></button>
+        <button class="cart-btn" onclick="showCart()" title="장바구니" aria-label="장바구니">
+          <!-- 장바구니(쇼핑백) 아이콘 - 선으로만 그린 SVG -->
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none"
+               stroke="currentColor" stroke-width="1.5"
+               stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5.5 8h13l-1.1 11.2a1.5 1.5 0 0 1-1.5 1.3H8.1a1.5 1.5 0 0 1-1.5-1.3L5.5 8z"/>
+            <path d="M9 8.5V6.2a3 3 0 0 1 6 0v2.3"/>
+          </svg>
+          <span id="cartCount">0</span>
+        </button>
       </div>
     </div>
   </header>
@@ -922,7 +947,12 @@
 
     function addCart(name) {
       cartList.push(name);
-      document.getElementById("cartCount").textContent = cartList.length;
+
+      // 개수 배지 갱신 - 0개면 숨기고, 1개 이상이면 보여줌
+      var badge = document.getElementById("cartCount");
+      badge.textContent = cartList.length;
+      badge.style.display = (cartList.length > 0) ? "block" : "none";
+
       alert(name + " 을(를) 장바구니에 담았습니다.");
     }
 
