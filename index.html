@@ -150,6 +150,47 @@
       color: white;
     }
 
+    /* ===== 검색창 ===== */
+    .search {
+      margin-bottom: 26px;
+    }
+
+    .search input {
+      width: 320px;
+      max-width: 80%;
+      font-size: 15px;
+      font-family: inherit;
+      padding: 11px 18px;
+      border: 2px solid #FF8A3D;
+      border-radius: 25px;
+      outline: none;
+    }
+
+    /* 검색창을 클릭했을 때 테두리를 진하게 */
+    .search input:focus {
+      border-color: #C2540A;
+    }
+
+    /* 검색 결과 없음 안내 (평소에는 숨겨둠) */
+    #noResult {
+      display: none;
+      background-color: rgba(255, 248, 242, 0.93);
+      max-width: 400px;
+      margin: 10px auto 0;
+      padding: 26px 20px;
+      border-radius: 18px;
+    }
+
+    .no-face {
+      font-size: 44px;
+    }
+
+    #noText {
+      font-size: 16px;
+      color: #4A3B31;
+      margin: 6px 0 16px;
+    }
+
     /* 한 줄에 5개씩, 두 줄로 배열 (10개 = 위 5개 + 아래 5개)
        repeat(5, 180px) = 180px 짜리 칸을 5개 만든다는 뜻 */
     .card-box {
@@ -171,12 +212,38 @@
       width: 180px;
       padding: 10px;
       cursor: pointer;
+      position: relative;   /* 하트 버튼의 기준 위치가 됨 */
 
       /* 내용을 좌우 가운데로 모음 */
       display: flex;
       flex-direction: column;
       align-items: center;
       text-align: center;
+    }
+
+    /* ===== 찜하기 하트 버튼 ===== */
+    /* position: absolute 는 .card 의 position: relative 를 기준으로 자리를 잡습니다 */
+    .heart {
+      position: absolute;
+      top: 4px;
+      right: 14px;
+
+      /* 공통 버튼 모양(주황 알약)을 지우고 글자만 남김 */
+      background: none;
+      border: none;
+      border-radius: 0;
+      padding: 0;
+
+      font-size: 24px;
+      color: #E8452F;
+      opacity: 0.3;          /* 평소에는 흐리게 */
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    /* 눌렀을 때 (on 이 붙으면) 진하게 */
+    .heart.on {
+      opacity: 1;
     }
 
     /* 마우스를 올리면 사진이 살짝 커짐 */
@@ -333,15 +400,22 @@
   <!-- 상품 카드 10개 -->
   <section class="products">
     <h2>특가 상품 ✨</h2>
+
+    <!-- 검색창 -->
+    <div class="search">
+      <input type="text" id="searchBox" placeholder="🔍 상품 이름을 입력하세요" oninput="searchProduct(this.value)">
+    </div>
     <div class="card-box">
 
       <div class="card" data-cat="간식">
+        <button class="heart" onclick="toggleHeart(event, this)">&#9829;</button>
         <div class="emoji"><img src="img/p1-chew.jpg" alt="오래오래 껌 간식"></div>
         <h3>오래오래 껌 간식</h3>
         <p class="price">18,000원</p>
       </div>
 
       <div class="card" data-cat="장난감">
+        <button class="heart" onclick="toggleHeart(event, this)">&#9829;</button>
         <div class="emoji"><img src="img/p2-toy.jpg" alt="푹신한 삑삑이 인형"></div>
         <h3>푹신한 삑삑이 인형</h3>
         <p class="old-price">22,000원</p>
@@ -349,6 +423,7 @@
       </div>
 
       <div class="card" data-cat="산책">
+        <button class="heart" onclick="toggleHeart(event, this)">&#9829;</button>
         <div class="emoji"><img src="img/p3-harness.jpg" alt="편안한 가슴줄 세트"></div>
         <h3>편안한 가슴줄 세트</h3>
         <p class="old-price">35,000원</p>
@@ -356,6 +431,7 @@
       </div>
 
       <div class="card" data-cat="용품">
+        <button class="heart" onclick="toggleHeart(event, this)">&#9829;</button>
         <!-- 케이지 아이콘 (그림을 코드로 직접 그린 SVG) -->
         <div class="emoji"><img src="img/p4-crate.jpg" alt="강아지 케이지"></div>
         <h3>강아지 케이지</h3>
@@ -364,6 +440,7 @@
       </div>
 
       <div class="card" data-cat="용품">
+        <button class="heart" onclick="toggleHeart(event, this)">&#9829;</button>
         <div class="emoji"><img src="img/p5-bed.jpg" alt="폭신 강아지 방석"></div>
         <h3>폭신 강아지 방석</h3>
         <p class="old-price">40,000원</p>
@@ -371,6 +448,7 @@
       </div>
 
       <div class="card" data-cat="간식">
+        <button class="heart" onclick="toggleHeart(event, this)">&#9829;</button>
         <div class="emoji"><img src="img/p6-treat.jpg" alt="연어 트릿"></div>
         <h3>연어 트릿 (100g)</h3>
         <p class="old-price">16,000원</p>
@@ -378,6 +456,7 @@
       </div>
 
       <div class="card" data-cat="장난감">
+        <button class="heart" onclick="toggleHeart(event, this)">&#9829;</button>
         <div class="emoji"><img src="img/p7-ball.jpg" alt="튼튼 노즈워크 공"></div>
         <h3>튼튼 노즈워크 공</h3>
         <p class="old-price">19,000원</p>
@@ -385,6 +464,7 @@
       </div>
 
       <div class="card" data-cat="위생">
+        <button class="heart" onclick="toggleHeart(event, this)">&#9829;</button>
         <div class="emoji"><img src="img/p8-brush.jpg" alt="실리콘 칫솔 세트"></div>
         <h3>실리콘 칫솔 세트</h3>
         <p class="old-price">12,000원</p>
@@ -392,6 +472,7 @@
       </div>
 
       <div class="card" data-cat="위생">
+        <button class="heart" onclick="toggleHeart(event, this)">&#9829;</button>
         <div class="emoji"><img src="img/p9-shampoo.jpg" alt="저자극 강아지 샴푸"></div>
         <h3>저자극 강아지 샴푸</h3>
         <p class="old-price">25,000원</p>
@@ -399,12 +480,20 @@
       </div>
 
       <div class="card" data-cat="용품">
+        <button class="heart" onclick="toggleHeart(event, this)">&#9829;</button>
         <div class="emoji"><img src="img/p10-coat.jpg" alt="겨울 포근 패딩 옷"></div>
         <h3>겨울 포근 패딩 옷</h3>
         <p class="old-price">42,000원</p>
         <p class="price"><span class="sale">30%</span>29,400원</p>
       </div>
 
+    </div>
+
+    <!-- 검색 결과가 하나도 없을 때만 보이는 안내 -->
+    <div id="noResult">
+      <p class="no-face">🐶</p>
+      <p id="noText">찾으시는 상품이 없어요</p>
+      <button class="cat-btn" onclick="resetSearch()">전체 상품 보기</button>
     </div>
   </section>
 
@@ -452,26 +541,84 @@
 
   <script>
 
+    // 지금 고른 카테고리와 검색어를 기억해 두는 곳
+    var nowCategory = "전체";
+    var nowKeyword = "";
+
     // 카테고리 버튼을 누르면 실행되는 함수
     // cat = 누른 카테고리 이름, btn = 누른 버튼 자신
     function showCategory(cat, btn) {
+      nowCategory = cat;
 
-      // 1) 모든 버튼에서 주황색(on)을 지우고, 누른 버튼에만 다시 칠하기
+      // 모든 버튼에서 주황색(on)을 지우고, 누른 버튼에만 다시 칠하기
       var buttons = document.querySelectorAll(".cat-btn");
       for (var i = 0; i < buttons.length; i++) {
         buttons[i].classList.remove("on");
       }
       btn.classList.add("on");
 
-      // 2) 상품 카드를 하나씩 보면서 보이기/숨기기
+      updateCards();
+    }
+
+    // 검색창에 글자를 칠 때마다 실행되는 함수
+    function searchProduct(word) {
+      nowKeyword = word.trim();   // trim() : 앞뒤 빈칸 없애기
+      updateCards();
+    }
+
+    // 카테고리와 검색어를 둘 다 만족하는 상품만 보여줌
+    function updateCards() {
       var cards = document.querySelectorAll(".card");
+      var count = 0;   // 화면에 남은 상품 개수
+
       for (var j = 0; j < cards.length; j++) {
-        if (cat === "전체" || cards[j].dataset.cat === cat) {
-          cards[j].style.display = "block";
+        var name = cards[j].querySelector("h3").textContent;
+
+        // 카테고리 조건: '전체'이거나, 카드의 카테고리가 같으면 통과
+        var catOk = (nowCategory === "전체" || cards[j].dataset.cat === nowCategory);
+
+        // 검색어 조건: 검색어가 비었거나, 상품 이름에 그 글자가 들어 있으면 통과
+        var wordOk = (nowKeyword === "" || name.indexOf(nowKeyword) !== -1);
+
+        if (catOk && wordOk) {
+          cards[j].style.display = "flex";   // .card 는 flex 라서 flex 로 되돌림
+          count++;
         } else {
           cards[j].style.display = "none";
         }
       }
+
+      // 남은 상품이 하나도 없으면 안내 문구를 보여줌
+      if (count === 0) {
+        document.getElementById("noResult").style.display = "block";
+
+        // 검색어가 있으면 그 단어를 문구에 넣어줌
+        if (nowKeyword !== "") {
+          document.getElementById("noText").textContent =
+            "'" + nowKeyword + "' 에 맞는 상품이 없어요";
+        } else {
+          document.getElementById("noText").textContent =
+            "이 카테고리에는 아직 상품이 없어요";
+        }
+      } else {
+        document.getElementById("noResult").style.display = "none";
+      }
+    }
+
+    // '전체 상품 보기' 버튼 - 검색어와 카테고리를 모두 처음 상태로 되돌림
+    function resetSearch() {
+      document.getElementById("searchBox").value = "";
+      nowKeyword = "";
+      nowCategory = "전체";
+
+      // 카테고리 버튼 색도 '전체'로 되돌리기
+      var buttons = document.querySelectorAll(".cat-btn");
+      for (var i = 0; i < buttons.length; i++) {
+        buttons[i].classList.remove("on");
+      }
+      buttons[0].classList.add("on");   // 맨 앞 버튼이 '전체'
+
+      updateCards();
     }
 
     // 담은 상품 이름을 모아두는 목록
@@ -494,6 +641,14 @@
       }
     }
 
+
+    // 하트(찜하기) 버튼을 누르면 진하게 <-> 흐리게 바꿈
+    // event.stopPropagation() : 하트를 눌렀을 때 카드 전체 클릭(장바구니 담기)이
+    //                           같이 실행되지 않도록 막아줍니다
+    function toggleHeart(event, btn) {
+      event.stopPropagation();
+      btn.classList.toggle("on");   // on 이 없으면 붙이고, 있으면 뗌
+    }
     // 동그란 상품 칸을 누르면 장바구니에 담기
     // 칸 안의 <h3> 글자(상품 이름)를 읽어서 addCart 에 넘겨줍니다
     var allCards = document.querySelectorAll(".card");
