@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>강아지나라 - 반려견 용품 전문몰</title>
+
+  <style>
+    /* ===== 기본 설정 ===== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    /* 사진이 안 보일 때를 대비한 기본 배경색 */
+    html {
+      background-color: #FFF8F2;
+    }
+
+    body {
+      font-family: "맑은 고딕", sans-serif;
+      color: #4A3B31;
+      line-height: 1.6;
+
+      /* 배경 사진 + 그 위에 어두운 막을 덮어 명암을 진하게 함 */
+      background-image:
+        linear-gradient(rgba(45, 28, 16, 0.55), rgba(45, 28, 16, 0.55)),
+        url("husky-bg.jpg");
+      /* 앞은 어두운 막, 뒤는 사진 크기 */
+      background-size: cover, cover;
+      background-position: center 25%;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+    }
+
+    /* ===== 맨 위 (헤더) - 슬림하게 ===== */
+    header {
+      background-color: #FF8A3D;
+      color: white;
+      text-align: center;
+      padding: 14px 20px;
+      position: relative;   /* 장바구니 버튼의 기준 위치가 됨 */
+    }
+
+    header h1 {
+      font-size: 25px;
+    }
+
+    header p {
+      font-size: 14px;
+      margin-top: 2px;
+    }
+
+    /* 장바구니 버튼 - 헤더 오른쪽 위에 붙임 */
+    .cart-btn {
+      position: absolute;
+      top: 16px;
+      right: 20px;
+      background-color: white;
+      color: #C2540A;
+      font-size: 14px;
+      padding: 8px 16px;
+    }
+
+    /* 담은 개수 숫자 */
+    #cartCount {
+      background-color: #E8452F;
+      color: white;
+      border-radius: 12px;
+      padding: 1px 8px;
+      margin-left: 4px;
+    }
+
+    /* 화면이 좁으면 장바구니 버튼을 제목 아래로 내림 */
+    @media (max-width: 620px) {
+      .cart-btn {
+        position: static;
+        margin-top: 8px;
+      }
+    }
+
+    /* ===== 메뉴 ===== */
+    nav {
+      background-color: #FFE3CC;
+      text-align: center;
+      padding: 15px;
+    }
+
+    nav a {
+      color: #C2540A;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 17px;
+      margin: 0 18px;
+    }
+
+    nav a:hover {
+      color: #FFB25E;
+    }
+
+
+    /* 버튼 공통 모양 */
+    button {
+      background-color: #FF8A3D;
+      color: white;
+      border: none;
+      border-radius: 25px;
+      padding: 14px 32px;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #F07020;
+    }
+
+    /* ===== 상품 영역 ===== */
+    .products {
+      padding: 50px 20px;
+      text-align: center;
+    }
+
+    .products h2 {
+      font-size: 28px;
+      margin-bottom: 30px;
+      /* 배경이 어두워서 제목은 흰색으로 */
+      color: #FFF3E6;
+    }
+
+    /* ===== 카테고리 버튼 ===== */
+    .category {
+      text-align: center;
+      padding: 20px 15px;
+    }
+
+    /* 평소 모습 (흰 바탕 + 주황 테두리) */
+    .cat-btn {
+      background-color: white;
+      color: #C2540A;
+      border: 2px solid #FF8A3D;
+      font-size: 15px;
+      padding: 8px 20px;
+      margin: 5px;
+    }
+
+    /* 선택된 버튼 (주황색으로 채워짐) */
+    .cat-btn.on {
+      background-color: #FF8A3D;
+      color: white;
+    }
+
+    /* ===== 검색창 ===== */
+    .search {
+      margin-bottom: 26px;
+    }
+
+    .search input {
+      width: 320px;
+      max-width: 80%;
+      font-size: 15px;
+      font-family: inherit;
+      padding: 11px 18px;
+      border: 2px solid #FF8A3D;
+      border-radius: 25px;
+      outline: none;
+    }
+
+    /* 검색창을 클릭했을 때 테두리를 진하게 */
+    .search input:focus {
+      border-color: #C2540A;
+    }
+
+    /* 검색 결과 없음 안내 (평소에는 숨겨둠) */
+    #noResult {
+      display: none;
+      background-color: rgba(255, 248, 242, 0.93);
+      max-width: 400px;
+      margin: 10px auto 0;
+      padding: 26px 20px;
+      border-radius: 18px;
+    }
+
+    .no-face {
+      font-size: 44px;
+    }
+
+    #noText {
+      font-size: 16px;
+      color: #4A3B31;
+      margin: 6px 0 16px;
+    }
+
+    /* 한 줄에 5개씩, 두 줄로 배열 (10개 = 위 5개 + 아래 5개)
+       repeat(5, 180px) = 180px 짜리 칸을 5개 만든다는 뜻 */
+    .card-box {
+      display: grid;
+      grid-template-columns: repeat(5, 180px);
+      justify-content: center;
+      gap: 20px;
+    }
+
+    /* 화면이 좁으면 한 줄에 2개씩 (휴대폰 대응) */
+    @media (max-width: 1020px) {
+      .card-box {
+        grid-template-columns: repeat(2, 180px);
+      }
+    }
+
+    /* 바깥 흰 동그라미를 없애고, 사진 동그라미만 남김 */
+    .card {
+      width: 180px;
+      padding: 10px;
+      cursor: pointer;
+      position: relative;   /* 하트 버튼의 기준 위치가 됨 */
+
+      /* 내용을 좌우 가운데로 모음 */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    /* ===== 찜하기 하트 버튼 ===== */
+    /* position: absolute 는 .card 의 position: relative 를 기준으로 자리를 잡습니다 */
+    .heart {
+      position: absolute;
+      top: 4px;
+      right: 14px;
+
+      /* 공통 버튼 모양(주황 알약)을 지우고 글자만 남김 */
+      background: none;
+      border: none;
+      border-radius: 0;
+      padding: 0;
+
+      font-size: 24px;
+      color: #E8452F;
+      opacity: 0.3;          /* 평소에는 흐리게 */
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    /* 눌렀을 때 (on 이 붙으면) 진하게 */
+    .heart.on {
+      opacity: 1;
+    }
+
+    /* 마우스를 올리면 사진이 살짝 커짐 */
+    .card img {
+      transition: transform 0.2s;
+    }
+
+    .card:hover img {
+      transform: scale(1.08);
+    }
+    /* 상품 사진을 작은 동그라미로 잘라서 보여줌
+       object-fit: cover = 사진이 찌그러지지 않고 꽉 차게 잘림 */
+    .card .emoji img {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .card h3 {
+      font-size: 14px;
+      margin: 10px 0 2px;
+      /* 어두운 배경 위라서 글자는 밝게 */
+      color: #FFF3E6;
+    }
+
+    /* 할인 전 가격 (회색 + 취소선) */
+    .old-price {
+      color: #C9BBAE;
+      text-decoration: line-through;
+      font-size: 12px;
+    }
+
+    /* 판매 가격 (주황색) */
+    .price {
+      color: #FFB25E;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    /* 할인율 배지 (예: 30%) */
+    .sale {
+      background-color: #E8452F;
+      color: white;
+      font-size: 11px;
+      font-weight: bold;
+      padding: 2px 7px;
+      border-radius: 12px;
+      margin-right: 5px;
+      vertical-align: middle;
+    }
+
+
+    /* ===== 쇼핑몰 소개 ===== */
+    .about {
+      /* 배경 사진 위에 올린 연한 크림색 판 */
+      background-color: rgba(255, 248, 242, 0.93);
+      max-width: 900px;
+      margin: 0 auto 50px;
+      padding: 35px 30px;
+      border-radius: 20px;
+      text-align: center;
+    }
+
+    .about h2 {
+      font-size: 24px;
+      margin-bottom: 18px;
+    }
+
+    /* 소개글 3줄 */
+    .about-text {
+      font-size: 15px;
+      margin-bottom: 4px;
+    }
+
+    /* 안내 3개를 가로로 나란히 */
+    .info-box {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-top: 28px;
+    }
+
+    /* 화면이 좁으면 안내를 세로로 쌓음 */
+    @media (max-width: 700px) {
+      .info-box {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .info {
+      background-color: white;
+      border-radius: 14px;
+      padding: 20px 16px;
+    }
+
+    .info-icon {
+      font-size: 34px;
+    }
+
+    .info h3 {
+      font-size: 16px;
+      color: #C2540A;
+      margin: 8px 0 6px;
+    }
+
+    .info p {
+      font-size: 13px;
+      color: #6B5A4C;
+    }
+    /* ===== 맨 아래 (연락처) ===== */
+    footer {
+      background-color: #4A3B31;
+      color: #FFE3CC;
+      text-align: center;
+      padding: 30px 20px;
+      font-size: 15px;
+    }
+
+    footer p {
+      margin: 5px 0;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- 맨 위: 쇼핑몰 이름과 소개 -->
+  <header>
+    <h1>🐶 강아지나라</h1>
+    <p>우리 강아지가 행복해지는 곳, 강아지나라입니다</p>
+    <!-- 장바구니 버튼 (담은 개수가 숫자로 표시됨) -->
+    <button class="cart-btn" onclick="showCart()">🛒 장바구니 <span id="cartCount">0</span></button>
+  </header>
+
+  <!-- 메뉴 4개 -->
+  <nav>
+    <a href="#">사료·간식</a>
+    <a href="#">장난감</a>
+    <a href="#">산책용품</a>
+    <a href="#">위생용품</a>
+  </nav>
+
+  <!-- 카테고리 버튼 (누르면 해당 상품만 보입니다) -->
+  <div class="category">
+    <button class="cat-btn on" onclick="showCategory('전체', this)">전체</button>
+    <button class="cat-btn" onclick="showCategory('간식', this)">간식</button>
+    <button class="cat-btn" onclick="showCategory('장난감', this)">장난감</button>
+    <button class="cat-btn" onclick="showCategory('산책', this)">산책</button>
+    <button class="cat-btn" onclick="showCategory('용품', this)">용품</button>
+    <button class="cat-btn" onclick="showCategory('위생', this)">위생</button>
+  </div>
+
+  <!-- 상품 카드 10개 -->
+  <section class="products">
+    <h2>특가 상품 ✨</h2>
+
+    <!-- 검색창 -->
+    <div class="search">
+      <input type="text" id="searchBox" placeholder="🔍 상품 이름을 입력하세요" oninput="searchProduct(this.value)">
+    </div>
+    <div class="card-box">
+
+      <div class="card" data-cat="간식">
+        <button class="heart" onclick="toggleHeart(event, this)">&#9829;</button>
+        <div class="emoji"><img src="img/p1-chew.jpg" alt="오래오래 껌 간식"></div>
+        <h3>오래오래 껌 간식</h3>
+        <p class="price">18,000원</p>
+      </div>
+
+      <div class="card" data-cat="장난감">
+        <button class="heart" onclick="toggleHeart(event, this)">&#9829;</button>
+        <div class="emoji"><img src="img/p2-toy.jpg" alt="푹신한 삑삑이 인형"></div>
+        <h3>푹신한 삑삑이 인형</h3>
+        <p class="old-price">22,000원</p>
+        <p class="price"><span class="sale">30%</span>15,400원</p>
+      </div>
+
+      <div class="card" data-cat="산책">
+        <button class="heart" onclick="toggleHeart(event, this)">&#9829;</button>
+        <div class="emoji"><img src="img/p3-harness.jpg" alt="편안한 가슴줄 세트"></div>
+        <h3>편안한 가슴줄 세트</h3>
+        <p class="old-price">35,000원</p>
+        <p class="price"><span class="sale">30%</span>24,500원</p>
+      </div>
+
+      <div class="card" data-cat="용품">
+        <button class="heart" onclick="toggleHeart(event, this)">&#9829;</button>
+        <!-- 케이지 아이콘 (그림을 코드로 직접 그린 SVG) -->
+        <div class="emoji"><img src="img/p4-crate.jpg" alt="강아지 케이지"></div>
+        <h3>강아지 케이지</h3>
+        <p class="old-price">140,000원</p>
+        <p class="price"><span class="sale">50%</span>70,000원</p>
+      </div>
+
+      <div class="card" data-cat="용품">
+        <button class="heart" onclick="toggleHeart(event, this)">&#9829;</button>
+        <div class="emoji"><img src="img/p5-bed.jpg" alt="폭신 강아지 방석"></div>
+        <h3>폭신 강아지 방석</h3>
+        <p class="old-price">40,000원</p>
+        <p class="price"><span class="sale">15%</span>34,000원</p>
+      </div>
+
+      <div class="card" data-cat="간식">
+        <button class="heart" onclick="toggleHeart(event, this)">&#9829;</button>
+        <div class="emoji"><img src="img/p6-treat.jpg" alt="연어 트릿"></div>
+        <h3>연어 트릿 (100g)</h3>
+        <p class="old-price">16,000원</p>
+        <p class="price"><span class="sale">20%</span>12,800원</p>
+      </div>
+
+      <div class="card" data-cat="장난감">
+        <button class="heart" onclick="toggleHeart(event, this)">&#9829;</button>
+        <div class="emoji"><img src="img/p7-ball.jpg" alt="튼튼 노즈워크 공"></div>
+        <h3>튼튼 노즈워크 공</h3>
+        <p class="old-price">19,000원</p>
+        <p class="price"><span class="sale">30%</span>13,300원</p>
+      </div>
+
+      <div class="card" data-cat="위생">
+        <button class="heart" onclick="toggleHeart(event, this)">&#9829;</button>
+        <div class="emoji"><img src="img/p8-brush.jpg" alt="실리콘 칫솔 세트"></div>
+        <h3>실리콘 칫솔 세트</h3>
+        <p class="old-price">12,000원</p>
+        <p class="price"><span class="sale">20%</span>9,600원</p>
+      </div>
+
+      <div class="card" data-cat="위생">
+        <button class="heart" onclick="toggleHeart(event, this)">&#9829;</button>
+        <div class="emoji"><img src="img/p9-shampoo.jpg" alt="저자극 강아지 샴푸"></div>
+        <h3>저자극 강아지 샴푸</h3>
+        <p class="old-price">25,000원</p>
+        <p class="price"><span class="sale">24%</span>19,000원</p>
+      </div>
+
+      <div class="card" data-cat="용품">
+        <button class="heart" onclick="toggleHeart(event, this)">&#9829;</button>
+        <div class="emoji"><img src="img/p10-coat.jpg" alt="겨울 포근 패딩 옷"></div>
+        <h3>겨울 포근 패딩 옷</h3>
+        <p class="old-price">42,000원</p>
+        <p class="price"><span class="sale">30%</span>29,400원</p>
+      </div>
+
+    </div>
+
+    <!-- 검색 결과가 하나도 없을 때만 보이는 안내 -->
+    <div id="noResult">
+      <p class="no-face">🐶</p>
+      <p id="noText">찾으시는 상품이 없어요</p>
+      <button class="cat-btn" onclick="resetSearch()">전체 상품 보기</button>
+    </div>
+  </section>
+
+  <!-- 쇼핑몰 소개 -->
+  <section class="about">
+    <h2>강아지나라 이야기</h2>
+
+    <!-- ▼ 소개글 3줄 - 이 세 줄만 고쳐 쓰시면 됩니다 ▼ -->
+    <p class="about-text">강아지나라는 열 살 된 믹스견 '보리'와 함께 지내며 시작한 작은 가게입니다.</p>
+    <p class="about-text">직접 써보고 좋았던 물건만 골라서, 가격 거품 없이 정직하게 팔고 있습니다.</p>
+    <p class="about-text">우리 아이에게 못 주는 물건은 손님께도 권하지 않겠습니다.</p>
+    <!-- ▲ 여기까지 ▲ -->
+
+    <!-- 안내 3가지 -->
+    <div class="info-box">
+
+      <div class="info">
+        <div class="info-icon">🚚</div>
+        <h3>무료배송</h3>
+        <p>3만원 이상 구매하시면 배송비가 무료입니다. 오후 2시 전 주문은 당일 출고됩니다.</p>
+      </div>
+
+      <div class="info">
+        <div class="info-icon">🔄</div>
+        <h3>교환·반품</h3>
+        <p>받으신 날부터 7일 안에 연락 주시면 교환해 드립니다. 개봉한 사료·간식은 어렵습니다.</p>
+      </div>
+
+      <div class="info">
+        <div class="info-icon">💬</div>
+        <h3>상담 안내</h3>
+        <p>어떤 제품이 맞을지 고민되시면 편하게 전화 주세요. 견종과 나이에 맞게 골라드립니다.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 맨 아래: 연락처 안내 -->
+  <footer>
+    <p>🐾 강아지나라</p>
+    <p>고객센터 : 010-3003-0000 (평일 10:00 ~ 18:00)</p>
+    <p>이메일 : help@doggynara.co.kr</p>
+    <p>주소 : 서울시 반려구 멍멍로 12길 3</p>
+  </footer>
+
+  <script>
+
+    // 지금 고른 카테고리와 검색어를 기억해 두는 곳
+    var nowCategory = "전체";
+    var nowKeyword = "";
+
+    // 카테고리 버튼을 누르면 실행되는 함수
+    // cat = 누른 카테고리 이름, btn = 누른 버튼 자신
+    function showCategory(cat, btn) {
+      nowCategory = cat;
+
+      // 모든 버튼에서 주황색(on)을 지우고, 누른 버튼에만 다시 칠하기
+      var buttons = document.querySelectorAll(".cat-btn");
+      for (var i = 0; i < buttons.length; i++) {
+        buttons[i].classList.remove("on");
+      }
+      btn.classList.add("on");
+
+      updateCards();
+    }
+
+    // 검색창에 글자를 칠 때마다 실행되는 함수
+    function searchProduct(word) {
+      nowKeyword = word.trim();   // trim() : 앞뒤 빈칸 없애기
+      updateCards();
+    }
+
+    // 카테고리와 검색어를 둘 다 만족하는 상품만 보여줌
+    function updateCards() {
+      var cards = document.querySelectorAll(".card");
+      var count = 0;   // 화면에 남은 상품 개수
+
+      for (var j = 0; j < cards.length; j++) {
+        var name = cards[j].querySelector("h3").textContent;
+
+        // 카테고리 조건: '전체'이거나, 카드의 카테고리가 같으면 통과
+        var catOk = (nowCategory === "전체" || cards[j].dataset.cat === nowCategory);
+
+        // 검색어 조건: 검색어가 비었거나, 상품 이름에 그 글자가 들어 있으면 통과
+        var wordOk = (nowKeyword === "" || name.indexOf(nowKeyword) !== -1);
+
+        if (catOk && wordOk) {
+          cards[j].style.display = "flex";   // .card 는 flex 라서 flex 로 되돌림
+          count++;
+        } else {
+          cards[j].style.display = "none";
+        }
+      }
+
+      // 남은 상품이 하나도 없으면 안내 문구를 보여줌
+      if (count === 0) {
+        document.getElementById("noResult").style.display = "block";
+
+        // 검색어가 있으면 그 단어를 문구에 넣어줌
+        if (nowKeyword !== "") {
+          document.getElementById("noText").textContent =
+            "'" + nowKeyword + "' 에 맞는 상품이 없어요";
+        } else {
+          document.getElementById("noText").textContent =
+            "이 카테고리에는 아직 상품이 없어요";
+        }
+      } else {
+        document.getElementById("noResult").style.display = "none";
+      }
+    }
+
+    // '전체 상품 보기' 버튼 - 검색어와 카테고리를 모두 처음 상태로 되돌림
+    function resetSearch() {
+      document.getElementById("searchBox").value = "";
+      nowKeyword = "";
+      nowCategory = "전체";
+
+      // 카테고리 버튼 색도 '전체'로 되돌리기
+      var buttons = document.querySelectorAll(".cat-btn");
+      for (var i = 0; i < buttons.length; i++) {
+        buttons[i].classList.remove("on");
+      }
+      buttons[0].classList.add("on");   // 맨 앞 버튼이 '전체'
+
+      updateCards();
+    }
+
+    // 담은 상품 이름을 모아두는 목록
+    var cartList = [];
+
+    // 상품을 장바구니에 담는 함수
+    // name 자리에는 누른 상품의 이름이 들어옵니다
+    function addCart(name) {
+      cartList.push(name);                                        // 목록에 추가
+      document.getElementById("cartCount").textContent = cartList.length;  // 숫자 갱신
+      alert(name + " 을(를) 장바구니에 담았어요! 🛒");
+    }
+
+    // 상단 장바구니 버튼을 누르면 담은 목록을 보여줌
+    function showCart() {
+      if (cartList.length === 0) {
+        alert("장바구니가 비어 있어요. 🐶\n상품을 눌러 담아보세요!");
+      } else {
+        alert("🛒 장바구니 (" + cartList.length + "개)\n\n- " + cartList.join("\n- "));
+      }
+    }
+
+
+    // 하트(찜하기) 버튼을 누르면 진하게 <-> 흐리게 바꿈
+    // event.stopPropagation() : 하트를 눌렀을 때 카드 전체 클릭(장바구니 담기)이
+    //                           같이 실행되지 않도록 막아줍니다
+    function toggleHeart(event, btn) {
+      event.stopPropagation();
+      btn.classList.toggle("on");   // on 이 없으면 붙이고, 있으면 뗌
+    }
+    // 동그란 상품 칸을 누르면 장바구니에 담기
+    // 칸 안의 <h3> 글자(상품 이름)를 읽어서 addCart 에 넘겨줍니다
+    var allCards = document.querySelectorAll(".card");
+    for (var k = 0; k < allCards.length; k++) {
+      allCards[k].onclick = function () {
+        addCart(this.querySelector("h3").textContent);
+      };
+    }
+  </script>
+
+</body>
+</html>
