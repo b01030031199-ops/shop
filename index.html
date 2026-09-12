@@ -230,6 +230,64 @@
       vertical-align: middle;
     }
 
+
+    /* ===== 쇼핑몰 소개 ===== */
+    .about {
+      /* 배경 사진 위에 올린 연한 크림색 판 */
+      background-color: rgba(255, 248, 242, 0.93);
+      max-width: 900px;
+      margin: 0 auto 50px;
+      padding: 35px 30px;
+      border-radius: 20px;
+      text-align: center;
+    }
+
+    .about h2 {
+      font-size: 24px;
+      margin-bottom: 18px;
+    }
+
+    /* 소개글 3줄 */
+    .about-text {
+      font-size: 15px;
+      margin-bottom: 4px;
+    }
+
+    /* 안내 3개를 가로로 나란히 */
+    .info-box {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-top: 28px;
+    }
+
+    /* 화면이 좁으면 안내를 세로로 쌓음 */
+    @media (max-width: 700px) {
+      .info-box {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .info {
+      background-color: white;
+      border-radius: 14px;
+      padding: 20px 16px;
+    }
+
+    .info-icon {
+      font-size: 34px;
+    }
+
+    .info h3 {
+      font-size: 16px;
+      color: #C2540A;
+      margin: 8px 0 6px;
+    }
+
+    .info p {
+      font-size: 13px;
+      color: #6B5A4C;
+    }
     /* ===== 맨 아래 (연락처) ===== */
     footer {
       background-color: #4A3B31;
@@ -345,6 +403,40 @@
         <h3>겨울 포근 패딩 옷</h3>
         <p class="old-price">42,000원</p>
         <p class="price"><span class="sale">30%</span>29,400원</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 쇼핑몰 소개 -->
+  <section class="about">
+    <h2>강아지나라 이야기</h2>
+
+    <!-- ▼ 소개글 3줄 - 이 세 줄만 고쳐 쓰시면 됩니다 ▼ -->
+    <p class="about-text">강아지나라는 열 살 된 믹스견 '보리'와 함께 지내며 시작한 작은 가게입니다.</p>
+    <p class="about-text">직접 써보고 좋았던 물건만 골라서, 가격 거품 없이 정직하게 팔고 있습니다.</p>
+    <p class="about-text">우리 아이에게 못 주는 물건은 손님께도 권하지 않겠습니다.</p>
+    <!-- ▲ 여기까지 ▲ -->
+
+    <!-- 안내 3가지 -->
+    <div class="info-box">
+
+      <div class="info">
+        <div class="info-icon">🚚</div>
+        <h3>무료배송</h3>
+        <p>3만원 이상 구매하시면 배송비가 무료입니다. 오후 2시 전 주문은 당일 출고됩니다.</p>
+      </div>
+
+      <div class="info">
+        <div class="info-icon">🔄</div>
+        <h3>교환·반품</h3>
+        <p>받으신 날부터 7일 안에 연락 주시면 교환해 드립니다. 개봉한 사료·간식은 어렵습니다.</p>
+      </div>
+
+      <div class="info">
+        <div class="info-icon">💬</div>
+        <h3>상담 안내</h3>
+        <p>어떤 제품이 맞을지 고민되시면 편하게 전화 주세요. 견종과 나이에 맞게 골라드립니다.</p>
       </div>
 
     </div>
