@@ -31,6 +31,11 @@
       box-sizing: border-box;
     }
 
+    /* hidden 이 붙은 요소는 무조건 숨김 */
+    [hidden] {
+      display: none !important;
+    }
+
     body {
       background-color: var(--bg);
       color: var(--text);
@@ -100,8 +105,9 @@
       color: var(--text);
     }
 
-    /* 장바구니 버튼 - 테두리만 있는 담백한 모양 */
-    .cart-btn {
+    /* 장바구니·회원 버튼 - 테두리만 있는 담백한 모양 */
+    .cart-btn,
+    .account-btn {
       position: relative;          /* 개수 배지의 기준 위치 */
       background: none;
       border: 1px solid var(--line);
@@ -118,7 +124,14 @@
       justify-content: center;
     }
 
-    .cart-btn:hover {
+    .cart-btn:hover,
+    .account-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* 로그인 상태면 회원 아이콘이 금색으로 */
+    .account-btn.on {
       border-color: var(--accent);
       color: var(--accent);
     }
@@ -596,8 +609,10 @@
 
     /* ===== 장바구니 팝업 - 화면 가운데에 뜨는 창 ===== */
 
-    /* 뒤를 어둡게 덮는 막 + 가운데 정렬 (막을 누르면 닫힘) */
-    #cartModal {
+    /* 뒤를 어둡게 덮는 막 + 가운데 정렬 (막을 누르면 닫힘)
+       회원 팝업(#authModal)도 같은 모양을 씀 */
+    #cartModal,
+    #authModal {
       position: fixed;
       inset: 0;
       z-index: 400;
@@ -613,7 +628,8 @@
       transition: opacity 0.25s, visibility 0.25s;
     }
 
-    #cartModal.show {
+    #cartModal.show,
+    #authModal.show {
       opacity: 1;
       visibility: visible;
     }
@@ -635,7 +651,8 @@
       transition: transform 0.25s ease;
     }
 
-    #cartModal.show .cart-box {
+    #cartModal.show .cart-box,
+    #authModal.show .cart-box {
       transform: none;
     }
 
@@ -820,6 +837,124 @@
       opacity: 0.88;
     }
 
+    .order-btn:disabled {
+      opacity: 0.5;
+      cursor: default;
+    }
+
+    /* ===== 회원가입 · 로그인 팝업 ===== */
+
+    /* 로그인 | 회원가입 탭 */
+    .auth-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .auth-tab {
+      flex: 1;
+      padding: 14px 0;
+      margin-bottom: -1px;
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: var(--muted);
+      font-family: inherit;
+      font-size: 13.5px;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .auth-tab:hover {
+      color: var(--text);
+    }
+
+    .auth-tab.on {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    .auth-form {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      padding: 22px 24px 26px;
+      overflow-y: auto;
+    }
+
+    .auth-form label {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      color: var(--muted);
+    }
+
+    .auth-form input {
+      padding: 11px 12px;
+      background-color: var(--bg);
+      border: 1px solid var(--line);
+      border-radius: 2px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .auth-form input:focus {
+      border-color: var(--accent);
+    }
+
+    /* 안내 문구 - 오류는 주황, 성공은 금색 */
+    .auth-msg {
+      min-height: 20px;
+      font-size: 12.5px;
+      line-height: 1.6;
+      color: var(--sale);
+    }
+
+    .auth-msg.ok {
+      color: var(--accent);
+    }
+
+    /* 로그인한 뒤 보이는 화면 */
+    .auth-welcome {
+      padding: 34px 24px 30px;
+      text-align: center;
+    }
+
+    .auth-welcome h3 {
+      font-family: "Noto Serif KR", serif;
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .auth-welcome p {
+      margin-bottom: 22px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .logout-btn {
+      padding: 9px 26px;
+      background: none;
+      border: 1px solid var(--line);
+      border-radius: 2px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 12.5px;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+    }
+
+    .logout-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
     /* ===== 화면이 좁을 때 ===== */
     @media (max-width: 880px) {
       nav {
@@ -872,6 +1007,15 @@
 
       <div class="head-right">
         <button class="sound-btn on" id="soundBtn" onclick="toggleSound()" title="강아지 소리 켜기 / 끄기">🔊</button>
+        <button class="account-btn" id="accountBtn" onclick="openAuth()" title="로그인 · 회원가입" aria-label="로그인 · 회원가입">
+          <!-- 회원 아이콘 - 가는 선으로 그린 사람 모양 -->
+          <svg viewBox="0 0 24 24" width="19" height="19" fill="none"
+               stroke="currentColor" stroke-width="1.25"
+               stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="8.5" r="3.75"/>
+            <path d="M4.75 20.25c.9-3.6 3.8-5.75 7.25-5.75s6.35 2.15 7.25 5.75"/>
+          </svg>
+        </button>
         <button class="cart-btn" onclick="showCart()" title="장바구니" aria-label="장바구니">
           <!-- 장바구니 아이콘 - 부티크 종이 쇼핑백 (가는 선으로 그린 SVG) -->
           <svg viewBox="0 0 24 24" width="19" height="19" fill="none"
@@ -899,6 +1043,59 @@
 
   <!-- 소리가 막혔을 때만 잠깐 보이는 안내 -->
   <div id="soundHint">🔊 화면을 한 번 클릭하시면 강아지 소리가 나옵니다</div>
+
+  <!-- 회원가입 · 로그인 팝업 - 상단 회원 아이콘을 누르면 뜸 -->
+  <div id="authModal" onclick="closeAuth()">
+    <div class="cart-box" role="dialog" aria-modal="true" aria-labelledby="authTitle" onclick="event.stopPropagation()">
+      <div class="cart-head">
+        <h2 id="authTitle">회원</h2>
+        <button class="cart-close" onclick="closeAuth()" aria-label="닫기">✕</button>
+      </div>
+
+      <!-- 로그인 전 : 로그인 / 회원가입 -->
+      <div id="authGuest">
+        <div class="auth-tabs">
+          <button class="auth-tab on" id="tabLogin" onclick="switchAuth('login')">로그인</button>
+          <button class="auth-tab" id="tabSignup" onclick="switchAuth('signup')">회원가입</button>
+        </div>
+
+        <form class="auth-form" id="loginForm" onsubmit="doLogin(event)">
+          <label>이메일
+            <input type="email" id="loginEmail" required autocomplete="email">
+          </label>
+          <label>비밀번호
+            <input type="password" id="loginPw" required autocomplete="current-password">
+          </label>
+          <p class="auth-msg" id="loginMsg"></p>
+          <button class="order-btn" type="submit">로그인</button>
+        </form>
+
+        <form class="auth-form" id="signupForm" onsubmit="doSignup(event)" hidden>
+          <label>이름
+            <input type="text" id="signupName" required maxlength="30" autocomplete="name">
+          </label>
+          <label>이메일
+            <input type="email" id="signupEmail" required autocomplete="email">
+          </label>
+          <label>비밀번호 (6자 이상)
+            <input type="password" id="signupPw" required minlength="6" autocomplete="new-password">
+          </label>
+          <label>비밀번호 확인
+            <input type="password" id="signupPw2" required minlength="6" autocomplete="new-password">
+          </label>
+          <p class="auth-msg" id="signupMsg"></p>
+          <button class="order-btn" type="submit">가입하기</button>
+        </form>
+      </div>
+
+      <!-- 로그인 후 : 인사 + 로그아웃 -->
+      <div class="auth-welcome" id="authUser" hidden>
+        <h3 id="welcomeName"></h3>
+        <p id="welcomeEmail"></p>
+        <button class="logout-btn" onclick="doLogout()">로그아웃</button>
+      </div>
+    </div>
+  </div>
 
   <!-- 장바구니 팝업 - 상단 장바구니 아이콘을 누르면 화면 가운데에 뜸 -->
   <div id="cartModal" onclick="closeCart()">
@@ -1446,14 +1643,172 @@
       document.body.style.overflow = "";
     }
 
-    // Esc 키로도 닫힘
+    // Esc 키로도 닫힘 (장바구니·회원 팝업 둘 다)
     document.addEventListener("keydown", function (e) {
-      if (e.key === "Escape") closeCart();
+      if (e.key === "Escape") {
+        closeCart();
+        closeAuth();
+      }
     });
 
     // 아직 결제 기능이 없어서 안내만 보여줌
     function order() {
       alert("주문 기능은 준비 중입니다.");
+    }
+
+    /* ===== 회원가입 · 로그인 (Supabase Auth) ===== */
+
+    function openAuth() {
+      document.getElementById("authModal").classList.add("show");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeAuth() {
+      document.getElementById("authModal").classList.remove("show");
+      document.body.style.overflow = "";
+    }
+
+    // 로그인 탭 <-> 회원가입 탭
+    function switchAuth(mode) {
+      var isSignup = (mode === "signup");
+      document.getElementById("tabLogin").classList.toggle("on", !isSignup);
+      document.getElementById("tabSignup").classList.toggle("on", isSignup);
+      document.getElementById("loginForm").hidden = isSignup;
+      document.getElementById("signupForm").hidden = !isSignup;
+      setMsg("loginMsg", "");
+      setMsg("signupMsg", "");
+    }
+
+    // 폼 아래 안내 문구 (ok 가 true 면 금색, 아니면 주황색)
+    function setMsg(id, text, ok) {
+      var el = document.getElementById(id);
+      el.textContent = text;
+      el.classList.toggle("ok", !!ok);
+    }
+
+    // Supabase 가 보내는 영어 오류를 한국어로
+    function authError(err) {
+      var m = (err.message || "").toLowerCase();
+      if (m.indexOf("already registered") !== -1) return "이미 가입된 이메일입니다.";
+      if (m.indexOf("invalid login credentials") !== -1) return "이메일 또는 비밀번호가 맞지 않습니다.";
+      if (m.indexOf("email not confirmed") !== -1) return "이메일 인증이 아직 안 됐어요. 받은 메일의 링크를 눌러 주세요.";
+      if (m.indexOf("rate limit") !== -1) return "요청이 너무 많아요. 잠시 후 다시 시도해 주세요.";
+      if (m.indexOf("password") !== -1) return "비밀번호는 6자 이상이어야 합니다.";
+      if (m.indexOf("email") !== -1) return "이메일 주소를 확인해 주세요.";
+      return "문제가 생겼어요: " + err.message;
+    }
+
+    // 인증 메일의 링크를 누르면 돌아올 주소 (내 컴퓨터 파일이면 인터넷 주소로)
+    function redirectUrl() {
+      if (location.protocol.indexOf("http") === 0) return location.origin + location.pathname;
+      return "https://b01030031199-ops.github.io/shop/";
+    }
+
+    function doSignup(e) {
+      e.preventDefault();
+      var form = e.target;
+      var btn = form.querySelector("button[type=submit]");
+      var name = document.getElementById("signupName").value.trim();
+      var email = document.getElementById("signupEmail").value.trim();
+      var pw = document.getElementById("signupPw").value;
+
+      if (pw !== document.getElementById("signupPw2").value) {
+        setMsg("signupMsg", "비밀번호가 서로 다릅니다.");
+        return;
+      }
+
+      btn.disabled = true;
+      setMsg("signupMsg", "가입하는 중...", true);
+
+      db.auth.signUp({
+        email: email,
+        password: pw,
+        options: {
+          data: { name: name },            // 이름은 회원 정보에 함께 저장
+          emailRedirectTo: redirectUrl()
+        }
+      }).then(function (res) {
+        btn.disabled = false;
+
+        if (res.error) {
+          setMsg("signupMsg", authError(res.error));
+          return;
+        }
+
+        // 이미 가입된 이메일이면 Supabase 가 오류 대신 빈 정보를 돌려줌
+        var user = res.data.user;
+        if (user && user.identities && user.identities.length === 0) {
+          setMsg("signupMsg", "이미 가입된 이메일입니다.");
+          return;
+        }
+
+        form.reset();
+
+        // 메일 인증이 꺼져 있으면 바로 로그인됨
+        if (res.data.session) {
+          closeAuth();
+          return;
+        }
+
+        setMsg("signupMsg", email + " 로 인증 메일을 보냈어요. 메일의 링크를 누르면 가입이 완료됩니다.", true);
+      });
+    }
+
+    function doLogin(e) {
+      e.preventDefault();
+      var form = e.target;
+      var btn = form.querySelector("button[type=submit]");
+
+      btn.disabled = true;
+      setMsg("loginMsg", "로그인하는 중...", true);
+
+      db.auth.signInWithPassword({
+        email: document.getElementById("loginEmail").value.trim(),
+        password: document.getElementById("loginPw").value
+      }).then(function (res) {
+        btn.disabled = false;
+
+        if (res.error) {
+          setMsg("loginMsg", authError(res.error));
+          return;
+        }
+
+        form.reset();
+        setMsg("loginMsg", "");
+        closeAuth();
+      });
+    }
+
+    function doLogout() {
+      db.auth.signOut().then(function () {
+        closeAuth();
+      });
+    }
+
+    // 로그인 상태에 맞게 상단 아이콘과 팝업 내용을 바꿈
+    function updateAuthUI(user) {
+      var btn = document.getElementById("accountBtn");
+      var name = "";
+
+      if (user) {
+        name = (user.user_metadata && user.user_metadata.name) || user.email.split("@")[0];
+        document.getElementById("welcomeName").textContent = name + "님, 반갑습니다";
+        document.getElementById("welcomeEmail").textContent = user.email;
+      }
+
+      btn.classList.toggle("on", !!user);
+      btn.title = user ? name + "님" : "로그인 · 회원가입";
+      document.getElementById("authTitle").textContent = user ? "내 계정" : "회원";
+      document.getElementById("authGuest").hidden = !!user;
+      document.getElementById("authUser").hidden = !user;
+    }
+
+    // 페이지를 열 때, 로그인·로그아웃할 때마다 자동으로 불림
+    // (인증 메일 링크로 돌아왔을 때도 여기서 로그인 상태가 됨)
+    if (window.db) {
+      db.auth.onAuthStateChange(function (event, session) {
+        updateAuthUI(session ? session.user : null);
+      });
     }
 
     /* ===== 찜하기 ===== */
