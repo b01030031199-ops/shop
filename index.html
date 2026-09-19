@@ -1242,7 +1242,9 @@
       <h2>특가 상품</h2>
     </div>
 
-    <div class="card-box">
+    <!-- 상품 카드는 페이지를 열 때 Supabase 의 products 테이블에서 불러와 다시 그립니다.
+         (Supabase 에 연결하지 못하면 아래에 적힌 카드가 그대로 보입니다) -->
+    <div class="card-box" id="cardBox">
 
       <div class="card" data-cat="간식">
         <div class="thumb">
@@ -1990,21 +1992,89 @@
 
     /* ===== 상품 카드 - 클릭하면 담기, 마우스를 올리면 소리 ===== */
 
-    var allCards = document.querySelectorAll(".card");
-    for (var k = 0; k < allCards.length; k++) {
-      allCards[k].onclick = function () {
-        addCart(this.querySelector("h3").textContent);
-      };
+    // 카드마다 클릭·담기 버튼·소리를 연결 (카드를 새로 그린 뒤에도 다시 부름)
+    function bindCards() {
+      var allCards = document.querySelectorAll(".card");
+      for (var k = 0; k < allCards.length; k++) {
+        allCards[k].onclick = function () {
+          addCart(this.querySelector("h3").textContent);
+        };
 
-      // 담기 버튼 - 누르면 담고, 카드 클릭이 같이 실행되지 않게 막음 (두 번 담기 방지)
-      allCards[k].querySelector(".add-btn").onclick = function (event) {
-        event.stopPropagation();
-        addCart(this.closest(".card").querySelector("h3").textContent);
-      };
+        // 담기 버튼 - 누르면 담고, 카드 클릭이 같이 실행되지 않게 막음 (두 번 담기 방지)
+        allCards[k].querySelector(".add-btn").onclick = function (event) {
+          event.stopPropagation();
+          addCart(this.closest(".card").querySelector("h3").textContent);
+        };
 
-      // mouseenter : 카드 안으로 마우스가 처음 들어올 때 한 번만 실행
-      allCards[k].onmouseenter = playBark;
+        // mouseenter : 카드 안으로 마우스가 처음 들어올 때 한 번만 실행
+        allCards[k].onmouseenter = playBark;
+      }
     }
+
+    bindCards();
+
+    /* ===== Supabase 에서 상품 불러오기 ===== */
+
+    // 상품명 같은 글자를 HTML 에 안전하게 넣기 위한 변환
+    function escapeHtml(text) {
+      return String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    // 상품 하나 → 카드 HTML
+    function cardHtml(p) {
+      var name = escapeHtml(p.name);
+      var priceRow = '<span class="price">' + toWon(p.price) + '</span>';
+
+      // 할인 중일 때만 정가와 할인율을 보여줌
+      if (p.discount > 0 && p.list_price > p.price) {
+        priceRow +=
+          '<span class="old-price">' + toWon(p.list_price) + '</span>' +
+          '<span class="sale">' + p.discount + '%</span>';
+      }
+
+      return (
+        '<div class="card" data-cat="' + escapeHtml(p.category) + '">' +
+          '<div class="thumb">' +
+            '<img src="' + escapeHtml(p.image_url) + '" alt="' + name + '">' +
+            '<button class="heart" onclick="toggleHeart(event, this)">&#9829;</button>' +
+          '</div>' +
+          '<h3>' + name + '</h3>' +
+          '<div class="price-row">' + priceRow + '</div>' +
+          '<button class="add-btn">담기</button>' +
+        '</div>'
+      );
+    }
+
+    // products 테이블을 번호 순서대로 읽어 카드를 다시 그림
+    function loadProducts() {
+      if (!window.db) return;   // Supabase 를 못 불러왔으면 HTML 카드 그대로 사용
+
+      db.from("products")
+        .select("*")
+        .order("id")
+        .then(function (res) {
+          if (res.error || !res.data || res.data.length === 0) {
+            console.log("⚠️ Supabase 상품을 불러오지 못해 기본 상품을 보여줍니다", res.error);
+            return;
+          }
+
+          var html = "";
+          for (var i = 0; i < res.data.length; i++) {
+            html += cardHtml(res.data[i]);
+          }
+
+          document.getElementById("cardBox").innerHTML = html;
+          bindCards();
+          updateCards();   // 고른 카테고리·검색어를 새 카드에도 적용
+          console.log("✅ Supabase 에서 상품 " + res.data.length + "개를 불러왔습니다");
+        });
+    }
+
+    loadProducts();
   </script>
 
 </body>
