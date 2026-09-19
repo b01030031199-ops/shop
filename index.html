@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>강아지나라 - 반려견 용품 전문몰</title>
+  <title>Maison Bori · 반려견 셀렉트숍</title>
 
   <!-- 글꼴 불러오기 (제목은 명조, 본문은 고딕) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -74,12 +74,13 @@
       gap: 20px;
     }
 
-    /* 가게 이름 - 명조체로 */
+    /* 가게 이름 - 명조체 영문 대문자, 글자 사이를 넓게 */
     .brand {
       font-family: "Noto Serif KR", serif;
-      font-size: 21px;
+      font-size: 19px;
       font-weight: 600;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.2em;
+      white-space: nowrap;
     }
 
     nav {
@@ -542,7 +543,8 @@
 
     .foot-brand {
       font-family: "Noto Serif KR", serif;
-      font-size: 17px;
+      font-size: 16px;
+      letter-spacing: 0.2em;
       margin-bottom: 10px;
     }
 
@@ -609,7 +611,7 @@
   <!-- ===== 상단 고정 바 ===== -->
   <header>
     <div class="wrap header-inner">
-      <div class="brand">강아지나라</div>
+      <div class="brand">MAISON BORI</div>
 
       <nav>
         <a href="#products">사료·간식</a>
@@ -808,6 +810,71 @@
         </div>
       </div>
 
+      <div class="card" data-cat="용품">
+        <div class="thumb">
+          <img src="img/p11-bowl.jpg" alt="천천히 먹는 슬로우 식기">
+          <button class="heart" onclick="toggleHeart(event, this)">&#9829;</button>
+        </div>
+        <h3>천천히 먹는 슬로우 식기</h3>
+        <div class="price-row">
+          <span class="price">16,800원</span>
+          <span class="old-price">24,000원</span>
+          <span class="sale">30%</span>
+        </div>
+      </div>
+
+      <div class="card" data-cat="산책">
+        <div class="thumb">
+          <img src="img/p12-collar.jpg" alt="수제 가죽 목줄">
+          <button class="heart" onclick="toggleHeart(event, this)">&#9829;</button>
+        </div>
+        <h3>수제 가죽 목줄</h3>
+        <div class="price-row">
+          <span class="price">38,400원</span>
+          <span class="old-price">48,000원</span>
+          <span class="sale">20%</span>
+        </div>
+      </div>
+
+      <div class="card" data-cat="장난감">
+        <div class="thumb">
+          <img src="img/p13-rope.jpg" alt="면 로프 터그 장난감">
+          <button class="heart" onclick="toggleHeart(event, this)">&#9829;</button>
+        </div>
+        <h3>면 로프 터그 장난감</h3>
+        <div class="price-row">
+          <span class="price">9,800원</span>
+          <span class="old-price">14,000원</span>
+          <span class="sale">30%</span>
+        </div>
+      </div>
+
+      <div class="card" data-cat="간식">
+        <div class="thumb">
+          <img src="img/p14-treat.jpg" alt="수제 뼈다귀 쿠키">
+          <button class="heart" onclick="toggleHeart(event, this)">&#9829;</button>
+        </div>
+        <h3>수제 뼈다귀 쿠키</h3>
+        <div class="price-row">
+          <span class="price">11,700원</span>
+          <span class="old-price">13,000원</span>
+          <span class="sale">10%</span>
+        </div>
+      </div>
+
+      <div class="card" data-cat="용품">
+        <div class="thumb">
+          <img src="img/p15-raincoat.jpg" alt="후드 레인코트">
+          <button class="heart" onclick="toggleHeart(event, this)">&#9829;</button>
+        </div>
+        <h3>후드 레인코트</h3>
+        <div class="price-row">
+          <span class="price">27,000원</span>
+          <span class="old-price">36,000원</span>
+          <span class="sale">25%</span>
+        </div>
+      </div>
+
     </div>
 
     <!-- 검색 결과가 없을 때만 보임 -->
@@ -823,12 +890,12 @@
 
       <div>
         <span class="label">About</span>
-        <h2>강아지나라<br>이야기</h2>
+        <h2>메종 보리<br>이야기</h2>
       </div>
 
       <div>
         <!-- ▼ 소개글 3줄 - 이 세 줄만 고쳐 쓰시면 됩니다 ▼ -->
-        <p class="about-text">강아지나라는 열 살 된 믹스견 보리와 함께 지내며 시작한 작은 가게입니다.</p>
+        <p class="about-text">메종 보리는 열 살 된 믹스견 보리와 함께 지내며 시작한 작은 가게입니다.</p>
         <p class="about-text">직접 써보고 좋았던 물건만 골라서, 가격 거품 없이 정직하게 팔고 있습니다.</p>
         <p class="about-text">우리 아이에게 못 주는 물건은 손님께도 권하지 않겠습니다.</p>
         <!-- ▲ 여기까지 ▲ -->
@@ -857,19 +924,26 @@
   <footer>
     <div class="wrap foot-inner">
       <div>
-        <div class="foot-brand">강아지나라</div>
+        <div class="foot-brand">MAISON BORI</div>
         <p>서울시 반려구 멍멍로 12길 3</p>
       </div>
       <div>
         <p>고객센터 010-3003-0000</p>
         <p>평일 10:00 – 18:00</p>
-        <p>help@doggynara.co.kr</p>
+        <p>help@maisonbori.co.kr</p>
       </div>
     </div>
 
     <!-- 효과음 출처 표기 (CC BY-SA 라이선스 조건) -->
     <div class="wrap credit">
       <p>효과음 : <a href="https://commons.wikimedia.org/wiki/File:Sound-of-dog.ogg" target="_blank" rel="noopener">Sound-of-dog</a> · Wikimedia Commons · CC BY-SA 3.0</p>
+      <p>상품 사진 (Wikimedia Commons) :
+        <a href="https://commons.wikimedia.org/wiki/File:Dark_Gray_Slow_Feeder_Dog_Bowl_with_Labyrinth_Pattern.jpg" target="_blank" rel="noopener">식기</a> ELTORO.VET · CC0 /
+        <a href="https://commons.wikimedia.org/wiki/File:Leather_dog_collar_made_by_Les_cuirs_d%27Agathe_(DSC07529).jpg" target="_blank" rel="noopener">목줄</a> Trougnouf (Benoit Brummer) · CC BY 4.0 /
+        <a href="https://commons.wikimedia.org/wiki/File:Maltipoo_with_rope_toy_(95554).jpg" target="_blank" rel="noopener">로프 장난감</a> Rhododendrites · CC BY-SA 4.0 /
+        <a href="https://commons.wikimedia.org/wiki/File:Bone_Dog_Treats_(51049786016).jpg" target="_blank" rel="noopener">뼈다귀 쿠키</a> Megan Marrs · CC BY 2.0 /
+        <a href="https://commons.wikimedia.org/wiki/File:Gismo-Regenmantel-01.jpg" target="_blank" rel="noopener">레인코트</a> Priwo · Public domain
+      </p>
     </div>
   </footer>
 
@@ -1067,3 +1141,4 @@
 
 </body>
 </html>
+ 
