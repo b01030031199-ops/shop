@@ -329,14 +329,15 @@
     .card {
       position: relative;
       cursor: pointer;
+      text-align: center;
     }
 
-    /* 사진칸 - 정사각형으로 잘라서 보여줌 */
+    /* 사진칸 - 원형으로 잘라서 보여줌 */
     .thumb {
       position: relative;
       aspect-ratio: 1 / 1;
       overflow: hidden;
-      border-radius: 3px;
+      border-radius: 50%;
       background-color: var(--surface);
     }
 
@@ -359,7 +360,7 @@
       left: 0;
       right: 0;
       bottom: 0;
-      padding: 11px;
+      padding: 11px 11px 18px;
       text-align: center;
       font-size: 12px;
       letter-spacing: 0.08em;
@@ -373,11 +374,11 @@
       transform: translateY(0);
     }
 
-    /* 찜하기 하트 - 사진 오른쪽 위 */
+    /* 찜하기 하트 - 원 안쪽 오른쪽 위 */
     .heart {
       position: absolute;
-      top: 10px;
-      right: 10px;
+      top: 13%;
+      right: 13%;
       z-index: 3;
       width: 32px;
       height: 32px;
@@ -412,6 +413,7 @@
     /* 가격 줄 */
     .price-row {
       display: flex;
+      justify-content: center;
       align-items: baseline;
       gap: 9px;
     }
