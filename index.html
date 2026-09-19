@@ -329,7 +329,6 @@
 
     .card {
       position: relative;
-      cursor: pointer;
       text-align: center;
     }
 
@@ -352,27 +351,6 @@
     /* 마우스를 올리면 사진이 천천히 확대됨 */
     .card:hover .thumb img {
       transform: scale(1.06);
-    }
-
-    /* 사진 아래에서 떠오르는 담기 안내 */
-    .thumb::after {
-      content: "장바구니 담기";
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      padding: 11px 11px 18px;
-      text-align: center;
-      font-size: 12px;
-      letter-spacing: 0.08em;
-      color: #0B0B0D;
-      background-color: rgba(237, 234, 229, 0.94);
-      transform: translateY(100%);
-      transition: transform 0.3s ease;
-    }
-
-    .card:hover .thumb::after {
-      transform: translateY(0);
     }
 
     /* 찜하기 하트 - 원 안쪽 오른쪽 위 */
@@ -436,6 +414,30 @@
       font-weight: 500;
       color: var(--sale);
       letter-spacing: 0.02em;
+    }
+
+    /* 담기 버튼 - 카드 맨 아래, 테두리만 있는 담백한 모양 */
+    .add-btn {
+      display: block;
+      width: 100%;
+      margin-top: 14px;
+      padding: 10px 0;
+      background: none;
+      border: 1px solid var(--line);
+      border-radius: 2px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 12.5px;
+      letter-spacing: 0.12em;
+      cursor: pointer;
+      transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+    }
+
+    /* 마우스를 올리면 금색으로 채워짐 */
+    .add-btn:hover {
+      background-color: var(--accent);
+      border-color: var(--accent);
+      color: #0B0B0D;
     }
 
     /* 검색 결과 없을 때 */
@@ -693,6 +695,7 @@
           <span class="old-price">18,000원</span>
           <span class="sale">50%</span>
         </div>
+        <button class="add-btn">담기</button>
       </div>
 
       <div class="card" data-cat="장난감">
@@ -706,6 +709,7 @@
           <span class="old-price">22,000원</span>
           <span class="sale">50%</span>
         </div>
+        <button class="add-btn">담기</button>
       </div>
 
       <div class="card" data-cat="산책">
@@ -719,6 +723,7 @@
           <span class="old-price">35,000원</span>
           <span class="sale">50%</span>
         </div>
+        <button class="add-btn">담기</button>
       </div>
 
       <div class="card" data-cat="용품">
@@ -732,6 +737,7 @@
           <span class="old-price">140,000원</span>
           <span class="sale">50%</span>
         </div>
+        <button class="add-btn">담기</button>
       </div>
 
       <div class="card" data-cat="용품">
@@ -745,6 +751,7 @@
           <span class="old-price">40,000원</span>
           <span class="sale">50%</span>
         </div>
+        <button class="add-btn">담기</button>
       </div>
 
       <div class="card" data-cat="간식">
@@ -758,6 +765,7 @@
           <span class="old-price">16,000원</span>
           <span class="sale">50%</span>
         </div>
+        <button class="add-btn">담기</button>
       </div>
 
       <div class="card" data-cat="장난감">
@@ -771,6 +779,7 @@
           <span class="old-price">19,000원</span>
           <span class="sale">50%</span>
         </div>
+        <button class="add-btn">담기</button>
       </div>
 
       <div class="card" data-cat="위생">
@@ -784,6 +793,7 @@
           <span class="old-price">12,000원</span>
           <span class="sale">50%</span>
         </div>
+        <button class="add-btn">담기</button>
       </div>
 
       <div class="card" data-cat="위생">
@@ -797,6 +807,7 @@
           <span class="old-price">25,000원</span>
           <span class="sale">50%</span>
         </div>
+        <button class="add-btn">담기</button>
       </div>
 
       <div class="card" data-cat="용품">
@@ -810,6 +821,7 @@
           <span class="old-price">42,000원</span>
           <span class="sale">50%</span>
         </div>
+        <button class="add-btn">담기</button>
       </div>
 
       <div class="card" data-cat="용품">
@@ -823,6 +835,7 @@
           <span class="old-price">24,000원</span>
           <span class="sale">50%</span>
         </div>
+        <button class="add-btn">담기</button>
       </div>
 
       <div class="card" data-cat="산책">
@@ -836,6 +849,7 @@
           <span class="old-price">48,000원</span>
           <span class="sale">50%</span>
         </div>
+        <button class="add-btn">담기</button>
       </div>
 
       <div class="card" data-cat="장난감">
@@ -849,6 +863,7 @@
           <span class="old-price">14,000원</span>
           <span class="sale">50%</span>
         </div>
+        <button class="add-btn">담기</button>
       </div>
 
       <div class="card" data-cat="간식">
@@ -862,6 +877,7 @@
           <span class="old-price">13,000원</span>
           <span class="sale">50%</span>
         </div>
+        <button class="add-btn">담기</button>
       </div>
 
       <div class="card" data-cat="용품">
@@ -875,6 +891,7 @@
           <span class="old-price">36,000원</span>
           <span class="sale">50%</span>
         </div>
+        <button class="add-btn">담기</button>
       </div>
 
     </div>
@@ -1044,8 +1061,8 @@
 
     /* ===== 찜하기 ===== */
 
-    // event.stopPropagation() : 하트를 눌렀을 때 카드 전체 클릭(장바구니)이
-    //                           같이 실행되지 않도록 막아줍니다
+    // event.stopPropagation() : 하트를 누른 클릭이 카드 바깥으로
+    //                           번지지 않도록 막아줍니다
     function toggleHeart(event, btn) {
       event.stopPropagation();
       btn.classList.toggle("on");
@@ -1132,8 +1149,9 @@
 
     var allCards = document.querySelectorAll(".card");
     for (var k = 0; k < allCards.length; k++) {
-      allCards[k].onclick = function () {
-        addCart(this.querySelector("h3").textContent);
+      // 담기 버튼을 누르면 그 카드의 상품 이름을 장바구니에 담음
+      allCards[k].querySelector(".add-btn").onclick = function () {
+        addCart(this.closest(".card").querySelector("h3").textContent);
       };
 
       // mouseenter : 카드 안으로 마우스가 처음 들어올 때 한 번만 실행
