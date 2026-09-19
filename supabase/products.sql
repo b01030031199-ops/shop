@@ -31,7 +31,7 @@ grant select on public.products to anon, authenticated;
 
 -- 3) 홈페이지 상품 15개 넣기
 insert into public.products (id, name, category, price, list_price, discount, image_url) values
-  ( 1, '오래오래 껌 간식', '간식',   9000,  18000, 50, 'https://b01030031199-ops.github.io/shop/img/p1-chew.jpg'),
+  ( 1, '오래오래 껌 간식', '간식',  12000,  18000, 33, 'https://b01030031199-ops.github.io/shop/img/p1-chew.jpg'),
   ( 2, '푹신한 삑삑이 인형', '장난감',  11000,  22000, 50, 'https://b01030031199-ops.github.io/shop/img/p2-toy.jpg'),
   ( 3, '편안한 가슴줄 세트', '산책',  17500,  35000, 50, 'https://b01030031199-ops.github.io/shop/img/p3-harness.jpg'),
   ( 4, '강아지 케이지', '용품',  70000, 140000, 50, 'https://b01030031199-ops.github.io/shop/img/p4-crate.jpg'),

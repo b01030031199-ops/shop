@@ -1253,9 +1253,9 @@
         </div>
         <h3>오래오래 껌 간식</h3>
         <div class="price-row">
-          <span class="price">9,000원</span>
+          <span class="price">12,000원</span>
           <span class="old-price">18,000원</span>
-          <span class="sale">50%</span>
+          <span class="sale">33%</span>
         </div>
         <button class="add-btn">담기</button>
       </div>
@@ -2030,10 +2030,12 @@
       var priceRow = '<span class="price">' + toWon(p.price) + '</span>';
 
       // 할인 중일 때만 정가와 할인율을 보여줌
-      if (p.discount > 0 && p.list_price > p.price) {
+      // 할인율은 정가·판매가로 직접 계산 (테이블에서 가격만 고쳐도 항상 맞게)
+      if (p.list_price > p.price) {
+        var discount = Math.round((p.list_price - p.price) / p.list_price * 100);
         priceRow +=
           '<span class="old-price">' + toWon(p.list_price) + '</span>' +
-          '<span class="sale">' + p.discount + '%</span>';
+          '<span class="sale">' + discount + '%</span>';
       }
 
       return (
