@@ -1241,6 +1241,28 @@
     </div>
   </footer>
 
+  <!-- ===== Supabase (온라인 데이터베이스) 연결 ===== -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script>
+    // 프로젝트 주소와 공개용(publishable) 키 - 웹페이지에 넣어도 되는 키입니다
+    // (비밀 키 secret key 는 절대 여기에 넣지 마세요)
+    var SUPABASE_URL = "https://ojwpdloujmrezcgsggmn.supabase.co";
+    var SUPABASE_KEY = "sb_publishable_oCQIL76VoIe51EN1OXwmXQ_3IxWkKV8";
+
+    // 앞으로 데이터를 읽고 쓸 때 이 db 를 사용합니다
+    //   예) db.from("orders").insert({ ... })
+    var db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    // 접속 확인 - 결과는 개발자 도구(F12) > Console 에 표시됩니다
+    fetch(SUPABASE_URL + "/auth/v1/health", { headers: { apikey: SUPABASE_KEY } })
+      .then(function (res) {
+        console.log(res.ok ? "✅ Supabase 연결됨" : "⚠️ Supabase 응답 이상: " + res.status);
+      })
+      .catch(function (err) {
+        console.log("❌ Supabase 연결 실패", err);
+      });
+  </script>
+
   <script>
     /* ===== 카테고리 + 검색 ===== */
 
